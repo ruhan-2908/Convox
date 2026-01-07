@@ -8,10 +8,11 @@ import LoginPage from "./pages/LoginPage.jsx";
 import {ProfilePage} from "./pages/ProfilePage.jsx";
 import {SettingsPage} from "./pages/SettingsPage.jsx";
 import {HomePage} from "./pages/HomePage.jsx";
+import {useThemeStore} from "./store/useThemeStore.js";
 
 const App = () => {
     const {authUser, checkAuth, isCheckingAuth} = useAuthStore();
-
+    const {theme} = useThemeStore();
     useEffect(() => {
         checkAuth();
     })
@@ -25,7 +26,7 @@ const App = () => {
     )
 
     return (
-        <div>
+        <div data-theme={theme}>
             <Navbar/>
             <Routes>
                 <Route path="/" element={authUser ? <HomePage/> : <Navigate to="/login"/>}/>
