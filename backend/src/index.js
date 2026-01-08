@@ -20,7 +20,7 @@ app.use(cors({
     credentials:true
 }))
 app.use("/api/auth", authRoutes);
-app.use("/api/message",messageRoute);
+app.use("/api/messages",messageRoute);
 app.listen(process.env.PORT, () =>{
     console.log('Backend server is running on port 5001');
     connectDB();
