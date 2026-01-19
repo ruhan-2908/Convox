@@ -1,22 +1,25 @@
 import Navbar from "./components/Navbar.jsx";
 import {Routes, Route, Navigate} from "react-router-dom";
 import {useAuthStore} from "./store/useAuthStore.js";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {Loader} from "lucide-react";
 import {SignUpPage} from "./pages/SignUpPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import {ProfilePage} from "./pages/ProfilePage.jsx";
-import {SettingsPage} from "./pages/SettingsPage.jsx";
+import SettingsPage from "./pages/SettingsPage.jsx";
 import {HomePage} from "./pages/HomePage.jsx";
 import {useThemeStore} from "./store/useThemeStore.js";
 
 const App = () => {
     const {authUser, checkAuth, isCheckingAuth,onlineUsers} = useAuthStore();
+    const hasCheckedAuth = useRef(false);
 
     const {theme} = useThemeStore();
     useEffect(() => {
+        if (hasCheckedAuth.current) return;
+        hasCheckedAuth.current = true;
         checkAuth();
-    })
+    }, [checkAuth])
 
     console.log(authUser);
     console.log("Online Users: ",onlineUsers);

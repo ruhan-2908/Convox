@@ -2,7 +2,7 @@ import {useChatStore} from "../store/useChatStore.js";
 
 import Sidebar from "../components/SIdebar.jsx";
 import NoChatSelected from "../components/NoChatSelected.jsx";
-import ChatContainer from "../components/ChatContainer.js";
+import ChatContainer from "../components/ChatContainer.jsx";
 
 
 export const HomePage = () => {

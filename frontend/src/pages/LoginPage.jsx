@@ -10,11 +10,17 @@ const LoginPage = () => {
         email: "",
         password: "",
     });
+    const [error, setError] = useState("");
     const { login, isLoggingIn } = useAuthStore();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        login(formData);
+        setError("");
+        try {
+            await login(formData);
+        } catch (err) {
+            setError(err?.message || "Unable to sign in. Please try again.");
+        }
     };
 
     return (
@@ -84,6 +90,12 @@ const LoginPage = () => {
                                 </button>
                             </div>
                         </div>
+
+                        {error && (
+                            <div className="alert alert-error text-sm">
+                                {error}
+                            </div>
+                        )}
 
                         <button type="submit" className="btn btn-primary w-full" disabled={isLoggingIn}>
                             {isLoggingIn ? (

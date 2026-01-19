@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
 import cloudinary from "../lib/cloudinary.js";
+import {getReceiverSocketId, io} from "../lib/socket.js";
 
 export const getUsersForSideBar = async (req, res) => {
     try {
@@ -54,12 +55,24 @@ export const sendMessage = async (req,res) => {
 
         await newMessage.save();
 
-        //socket.io functionality
+        // normalize to plain object with string ids for consistent client comparisons
+        const plainMessage = {
+            ...newMessage.toObject(),
+            _id: newMessage._id.toString(),
+            senderId: newMessage.senderId.toString(),
+            receiverId: newMessage.receiverId.toString(),
+        };
 
-        return res.status(201).json(newMessage);
+        //socket.io functionality
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if(receiverSocketId)
+        {
+            io.to(receiverSocketId).emit("newMessage",plainMessage);
+        }
+        return res.status(201).json(plainMessage);
     }catch(error)
     {
-        console.log("Error in the sendMessage Controller: ",error.message());
+        console.log("Error in the sendMessage Controller: ",error.message);
         return res.status(500).json({message : " Internal Server Error"});
     }
 }
